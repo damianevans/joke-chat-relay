@@ -22,6 +22,7 @@ public class JokeStreamController : ControllerBase
     [HttpGet]
     public async Task Get() {
         Response.Headers.Add("Content-Type", "text/event-stream");
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
         //read 128 bytes at a time from socket
         using TcpClient tcpClient = new TcpClient(_chatHost, 8989);
         NetworkStream stream = tcpClient.GetStream();
