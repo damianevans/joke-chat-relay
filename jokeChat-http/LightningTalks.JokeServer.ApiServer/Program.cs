@@ -23,7 +23,7 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .AllowAnyOrigin()
     //.WithOrigins("https://localhost:44351")); // Allow only this origin can also have multiple origins separated with comma
-    .AllowCredentials()); // allow credentials
+    ); // allow credentials
 app.UseAuthorization();
 
 app.MapControllers();
