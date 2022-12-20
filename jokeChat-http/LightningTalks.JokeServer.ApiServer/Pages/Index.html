@@ -13,13 +13,13 @@
         </div>
     </div>
     <script type="text/javascript">
-        var source = new EventSource('https://localhost:7283/JokeStream');
-        source.onMessage = function(event) {
+        var source = new EventSource('https://lightning-talk-nsg-webapi.azurewebsites.net/JokeStream');
+        source.onmessage = function(event) {
             console.write(event.data);
             if(event.data.startsWith('[Eric]')) {
-                document.getElementById("eric").innerHtml += event.data;
+                document.getElementById("eric").innerHtml += event.data + "<br/>";
             } else {
-                document.getElementById("ernie").innerHtml += event.data;
+                document.getElementById("ernie").innerHtml += event.data + "<br/>";
             }
         }
     </script>
