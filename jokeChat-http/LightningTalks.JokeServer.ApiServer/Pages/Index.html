@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Funny Jokes Ha ha ha</title>
+</head>
+<body>
+
+    <div style="width: 100%;">
+        <div style="float: right; width: 40%; border: solid 1px red;" id="ernie">
+        </div>
+        <div style="float: left; width: 40%; border: solid 1px blue;" id="eric">
+        </div>
+    </div>
+    <script type="text/javascript">
+        var source = new EventSource('https://localhost:7283/JokeStream');
+        source.onMessage = function(event) {
+            console.write(event.data);
+            if(event.data.startsWith('[Eric]')) {
+                document.getElementById("eric").innerHtml += event.data;
+            } else {
+                document.getElementById("ernie").innerHtml += event.data;
+            }
+        }
+    </script>
+</body>
+</html>
