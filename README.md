@@ -1,0 +1,1 @@
+*Joke Chat Relay
