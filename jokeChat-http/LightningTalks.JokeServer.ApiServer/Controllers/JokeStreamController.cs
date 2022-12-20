@@ -27,8 +27,8 @@ public class JokeStreamController : ControllerBase
         using TcpClient tcpClient = new TcpClient(_chatHost, 8989);
         NetworkStream stream = tcpClient.GetStream();
 
-        while (stream != null)
-        {
+        //while (stream != null)
+        //{
             byte[] data = new byte[128];
 
             Int32 bytes = stream.Read(data, 0, data.Length);
@@ -37,7 +37,7 @@ public class JokeStreamController : ControllerBase
             //write out
             await Response.Body.WriteAsync(data, 0, bytes);
             await Response.Body.FlushAsync();
-        }
+        //}
 
     }
 }
