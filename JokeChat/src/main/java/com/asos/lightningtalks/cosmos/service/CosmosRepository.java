@@ -9,6 +9,7 @@ import com.azure.cosmos.util.CosmosPagedFlux;
 import com.azure.cosmos.util.CosmosPagedIterable;
 import reactor.core.publisher.Flux;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,19 +24,34 @@ public class CosmosRepository {
     private CosmosAsyncDatabase database;
     private CosmosAsyncContainer container;
 
-    public CosmosRepository() {
-        client = new CosmosClientBuilder()
-                .endpoint(AccountSettings.HOST)
-                .key(AccountSettings.MASTER_KEY)
-                .preferredRegions(Collections.singletonList("UK South"))
-                .consistencyLevel(ConsistencyLevel.EVENTUAL)
-                .contentResponseOnWriteEnabled(true)
-                .buildAsyncClient();
-        CosmosPagedFlux<CosmosDatabaseProperties> databaseResponse = client.readAllDatabases();
+    private AccountSettings accountSettings;
 
-                //.filter(p -> p);
-        database = client.getDatabase(AccountSettings.DATABASE);
-        container = database.getContainer(AccountSettings.CONTAINER);
+    public CosmosRepository() {
+        try {
+            accountSettings = new AccountSettings()
+                    .addCosmosDatabaseIdConfig()
+                    .addCosmosAccountHostConfig()
+                    .addCosmosContainerConfig()
+                    .addCosmosMasterKeyConfig()
+                    .build();
+
+            client = new CosmosClientBuilder()
+                    .endpoint(accountSettings.getCosmosHostConfig())
+                    .key(accountSettings.getCosmosMasterKeyConfig())
+                    .preferredRegions(Collections.singletonList("UK South"))
+                    .consistencyLevel(ConsistencyLevel.EVENTUAL)
+                    .contentResponseOnWriteEnabled(true)
+                    .buildAsyncClient();
+            CosmosPagedFlux<CosmosDatabaseProperties> databaseResponse = client.readAllDatabases();
+
+            //.filter(p -> p);
+            database = client.getDatabase(accountSettings.getCosmosDatabaseId());
+            container = database.getContainer(accountSettings.getCosmosContainerConfig());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     public ArrayList<Joke> queryItems() {
